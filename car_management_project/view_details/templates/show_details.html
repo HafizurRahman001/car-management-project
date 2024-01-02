@@ -1,0 +1,78 @@
+{%extends 'base.html' %}
+
+{%block content%}
+<div class="container my-5">
+    <div class="row border rounded py-3 px-2">
+        <div class="col-4">
+            <img style="height:220px" src="{{object.car_image.url}}" alt="Car image" class="img-fluid border rounded">
+        </div>
+        <div class="col-4 bg-light px-3 py-3">
+            <h4>{{object.car_title}}</h4>
+            <p class="text-secondary">{{object.car_description}}</p>
+        </div>
+        <div style='background-color: floralwhite; border-left: 1px solid #5f9ea052' class="col-4 px-4 py-4 ">
+          <div class='d-flex align-items-center justify-content-center'>
+            <table class="table table-bordered">
+                <thead>
+                  {% comment %} <tr>
+                    <th scope="col"></th>
+                    <th scope="col">First</th>
+                  </tr> {% endcomment %}
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style='font-weight:bold; color: cadetblue;'>Car Model</td>
+                    <td>
+                        {%for i in object.car_model.all %}
+                        <p class='m-0 p-0'>{{i.brand_name}}</p>
+                        {%endfor%}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style='font-weight:bold; color: cadetblue;'>Price</td>
+                    <td>$ {{object.car_price}}</td>
+                  </tr>
+                  <tr>
+                    <td style='font-weight:bold; color: cadetblue;'>Quantity</td>
+                    <td>{{object.car_quantity}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {%if request.user.is_authenticated %}
+              <a class='d-block btn btn-warning' href="{% url 'purchase' object.id%}">Buy Now</a>
+              {%else%}
+              <p>For purchase please <a href="{%url 'login'%}">login</a></p>
+              {%endif%}
+              
+        </div>
+    </div>
+</div>
+
+
+<div class="comments container">
+  <div  class="card pb-3">
+    <h4 class='px-2 py-3'>Total comments: <span class="badge text-bg-secondary">{{comments | length}}</span></h4>
+    {%for cmnt in comments %}
+    <div style='background-color:azure' class="card-body border rounded mx-2 mb-1">
+        <span class='text-secondary pb-3 me-2'>{{cmnt.name}}</span>
+        <span style='color: #ff8484;' class='pb-3 me-2'>{{cmnt.created_on | date:'d/m/Y H:i'}}</span>
+        <p>{{cmnt.comment}}</p>
+    </div>
+    {%endfor%}
+  </div>
+</div>
+
+
+
+<div class="container">
+  {% load crispy_forms_tags %}
+  <form class='my-5 p-5' style=" background-color:antiquewhite; " method = 'post' action="">
+      <h1 class='pb-2'>Add Comments</h1>
+      {% csrf_token %}
+      {{comment_form | crispy}}
+      <input class='btn btn-danger px-4' type="submit" value="Submit">
+  </form>
+</div>
+{%endblock%}

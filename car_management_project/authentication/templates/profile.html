@@ -1,0 +1,51 @@
+{%extends 'base.html' %}
+
+{%block content%}
+{% load crispy_forms_tags %}
+<div class="profile_section container my-5">
+   <div class="container text-center">
+        <h1>Hello <span class='text-danger'>{{user | capfirst }}!</span> Welcome to the Profile Page </h1>
+
+   </div>
+   <div class="update_info my-3 text-center">
+         <a class='btn btn-success me-2' href="{% url 'update_profile' %}">Edit your profile</a>
+         <a class='btn btn-warning me-2' href="{% url 'password_change' %}">Change Password</a>
+   </div>
+</div>
+
+<div class="container">
+   <div class="row">
+      <div class="col-4"></div>
+      <div class="col-4">
+         <hr>
+         <h4 class='text-center text-secondary'>Your Transection History</h4>
+         <hr>
+      </div>
+      <div class="col-4"></div>
+   </div>
+
+   {%if purchaseData|length != 0 %}
+   <div class="row row-cols-1 row-cols-md-3 g-4 my-4">
+      {%for data in purchaseData %}
+      <div class="col">
+        <div class="card h-100">
+          <img style='height: 200px' src="{{data.car_image.url}}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{data.car_title}}</h5>
+            <p class="card-text">{{data.car_description}}</p>
+            <div class="others">
+               <h5>Price: ${{data.car_price}}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+
+
+   </div>
+   {%else%}
+   <h6 class='text-center text-danger'>You don't purchase any car. for purchase visit <a href="{% url 'home'%}">Purchase Car</a></h6>
+   {%endif%}
+
+{%endblock%}

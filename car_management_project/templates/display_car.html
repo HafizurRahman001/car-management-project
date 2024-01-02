@@ -1,0 +1,66 @@
+{%extends 'base.html' %}
+{%load static %}
+
+{%block content%}
+
+
+
+<div style="" class="car_hero_section your-container">
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col-6 p-5">
+      <h1>BEST CAR MANAGEMENT <br> <span style='font-weight:bold; color:orangered'>HOUSE STORE</span></h1>
+      <h4 class='pt-3'>CARS FOR SALES & RENT</h4>
+      <p class='text-secondary'>Lorem ipsum dolor sit, amet consectetur <br> adipisicing elit. Deleniti officia ut rem ratione</p>
+      <button class="mt-3 btn btn-danger px-3">Contact Us</button>
+      <div class="contact_logo d-flex mt-3">
+        <p class='me-5'><i class="me-2 text-danger bi bi-telephone-plus"></i> 01777-596949</p>
+        <p><i class="bi text-danger bi-envelope-at"></i> hafizurrahmanbu@gmail.com</p>
+      </div>
+    </div>
+    <div class="col-6 pe-4">
+      <img src="{% static 'car.png' %}" alt="" class="img-fluid">
+    </div>
+  </div>
+</div>
+
+
+
+<div class="category_model container text-center d-flex justify-content-center mt-4">
+    <a style='background-color: aquamarine' href="{% url 'display_car' %}" class='button btn border me-2 px-4 py-2'>All</a>
+    {%for category in modelCategoryData%}
+        <a style='background-color: aquamarine' class='button nav-link btn border p-2 me-2' href="{%url 'category_wise_post' category.slug %}">{{category.brand_name}}</a>
+    {%endfor%}
+</div>
+
+
+{%if carData|length != 0 %}
+<div class="display_data container my-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {%for car in carData%}
+        <div class="col">
+          <div class="card">
+            <img style='height: 200px !important' src="{{car.car_image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{car.car_title}}</h5>
+              <p class="card-text text-secondary">{{car.car_description | truncatechars:140 }}</p>
+              <p>Quantity: {{car.car_quantity}}</p>
+              <h6>Price: ${{car.car_price}}</h6>
+              <p>Car Brand: 
+                {%for brand in car.car_model.all %}
+                  <button class='border px-2 py-0 mb-1 rounded-3'>{{brand}}</button>
+                {%endfor%}
+              </p>
+              <a class='w-100 btn btn-primary' href="{% url 'details' car.id%}">View Details</a>
+            </div>
+          </div>
+        </div>
+        {%endfor%}
+      </div>
+</div>
+{%else%}
+<h1 class='text-center my-4 text-danger'>Nothig to Show</h1>
+{%endif%}
+
+
+
+{%endblock%}
